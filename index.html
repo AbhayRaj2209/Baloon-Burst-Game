@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>🎈 Balloon Burst Game</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at center, #0a4566 0%, #051b29 100%);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+        }
+        .logo {
+            font-size: 72px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #64c5ff 0%, #00a2ff 50%, #0077ff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .tagline {
+            font-size: 24px;
+            color: #8cceff;
+            margin-bottom: 40px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .enter-button {
+            display: inline-block;
+            padding: 20px 60px;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #ff6b6b, #ee0000);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(255,0,0,0.3);
+            transition: all 0.3s ease;
+            animation: bounce 1s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .enter-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255,0,0,0.4);
+        }
+        .enter-button:active {
+            transform: translateY(2px);
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        /* Floating balloons background */
+        .balloon-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .bg-balloon {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 30%, #ff6b6b 0%, #ff4b4b 100%);
+            border-radius: 50% 50% 45% 45%;
+            opacity: 0.15;
+            animation: float var(--duration) linear infinite;
+            animation-delay: var(--delay);
+            left: var(--x);
+        }
+        @keyframes float {
+            0% { transform: translateY(120vh) rotate(0deg); }
+            100% { transform: translateY(-50px) rotate(360deg); }
+        }
+        /* Decorative particles */
+        .particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            animation: particle 3s linear infinite;
+            opacity: 0.3;
+        }
+        @keyframes particle {
+            0% { transform: translate(var(--x), 120vh) scale(0); }
+            50% { opacity: 0.5; }
+            100% { transform: translate(var(--x), -50px) scale(1); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="balloon-bg" id="balloonBg"></div>
+    <div class="particles" id="particles"></div>
+    
+    <main class="container">
+        <h1 class="logo">BALLOON<br>BURST</h1>
+        <p class="tagline">Pop to Win • Dodge the Bombs • Beat the Clock</p>
+        <a href="game.html" class="enter-button">Enter Game</a>
+    </main>
+
+    <script>
+        // Create background balloons
+        function createBalloon() {
+            const balloon = document.createElement('div');
+            balloon.className = 'bg-balloon';
+            balloon.style.setProperty('--x', Math.random() * 100 + 'vw');
+            balloon.style.setProperty('--duration', (Math.random() * 3 + 8) + 's');
+            balloon.style.setProperty('--delay', -Math.random() * 10 + 's');
+            document.getElementById('balloonBg').appendChild(balloon);
+            balloon.addEventListener('animationend', () => balloon.remove());
+        }
+
+        // Create particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const x = Math.random() * 100 - 50;
+            particle.style.setProperty('--x', x + 'px');
+            document.getElementById('particles').appendChild(particle);
+            particle.addEventListener('animationend', () => particle.remove());
+        }
+
+        // Initialize animations
+        setInterval(createBalloon, 300);
+        setInterval(createParticle, 200);
+        for(let i = 0; i < 15; i++) {
+            setTimeout(createBalloon, i * 200);
+            setTimeout(createParticle, i * 150);
+        }
+    </script>
+</body>
+</html>

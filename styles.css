@@ -1,0 +1,200 @@
+/* Basic layout */
+:root{
+  --bg:#0b2340; /* night sky */
+  --hud:#062033;
+  --balloon:#ff6b6b;
+  --bomb:#ffcc00;
+}
+html,body{
+  height:100%;
+  margin:0;
+  font-family:Segoe UI, Roboto, Arial, sans-serif;
+  background:linear-gradient(180deg,var(--bg) 0%, #072b46 70%);
+  color:#fff;
+  cursor:crosshair;
+}
+.hud{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 20px;
+  background:rgba(0,0,0,0.2);
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:50;
+}
+.hud > div{margin:0 8px}
+.hud{gap:8px}
+.hud .center{font-weight:600}
+main{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding-top:70px;
+}
+.game-area{
+  position:relative;
+  width:100%;
+  height:calc(100vh - 160px);
+  overflow:hidden;
+  touch-action:none;
+}
+.controls{margin-top:10px}
+button{padding:10px 18px;border-radius:8px;border:0;background:#1e90ff;color:#fff;font-weight:600;cursor:pointer}
+button:active{transform:translateY(1px)}
+/* Balloon base styles */
+.balloon{
+  position:absolute;
+  bottom:-80px;
+  width:60px;
+  height:80px;
+  border-radius:50% 50% 45% 45%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  user-select:none;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,0,0,0.3);
+  transform-origin:center bottom;
+  transition:transform 150ms ease, opacity 200ms ease;
+  z-index:10;
+}
+.balloon::after{
+  content:"";
+  position:absolute;
+  bottom:-12px;
+  left:50%;
+  transform:translateX(-50%);
+  width:3px;height:12px;background:rgba(0,0,0,0.15);
+  border-radius:2px;
+}
+.balloon.normal{background:linear-gradient(180deg,#ff8b8b,#ff4b4b);} 
+.balloon.bomb{background:linear-gradient(180deg,#ffde8a,#ffb400); color:#222}
+
+/* Pop and explosion states */
+.balloon.popped{transform:scale(1.4) translateY(-20px); opacity:0; pointer-events:none}
+.balloon.exploded{transform:scale(0.2) rotate(-20deg); opacity:0; pointer-events:none}
+
+/* float animation (we'll change duration via inline style) */
+@keyframes floatUp {
+  0%{transform:translateY(0)}
+  100%{transform:translateY(-120vh)}
+}
+
+/* small pop / explosion effect */
+.pop-effect{
+  position:absolute;
+  width:12px;height:12px;border-radius:50%;
+  background:rgba(255,255,255,0.95);
+  pointer-events:none;
+  transform:translate(-50%,-50%) scale(0);
+  animation:popAnim 420ms cubic-bezier(.2,.8,.2,1) forwards;
+  z-index:150;
+}
+.pop-effect.bomb{background:radial-gradient(circle at 30% 30%, #fff 0%, #ff6b6b 40%, #ff2e2e 100%);}
+
+@keyframes popAnim{
+  0%{opacity:1; transform:translate(-50%,-50%) scale(0.2)}
+  60%{opacity:0.9; transform:translate(-50%,-50%) scale(1.6)}
+  100%{opacity:0; transform:translate(-50%,-50%) scale(3)}
+}
+
+/* Fruit-Ninja like slice pieces for bomb */
+.slice-container{position:absolute;pointer-events:none;z-index:160;overflow:visible}
+.slice-piece{
+  position:absolute;
+  width:36px; /* will be resized inline */
+  height:48px; /* will be resized inline */
+  border-radius:50% 50% 45% 45%;
+  transform-origin:center center;
+  box-shadow:0 6px 18px rgba(0,0,0,0.35);
+}
+.slice-piece.left{clip-path:polygon(0 0, 70% 0, 55% 100%, 0% 100%)}
+.slice-piece.right{clip-path:polygon(30% 0, 100% 0, 100% 100%, 45% 100%)}
+.slice-piece.bomb{background:linear-gradient(180deg,#ffde8a,#ffb400); color:#222}
+
+@keyframes sliceFlyLeft{
+  0%{transform:translate(0,0) rotate(0);} 
+  100%{transform:translate(-120px,120px) rotate(-70deg); opacity:0}
+}
+@keyframes sliceFlyRight{
+  0%{transform:translate(0,0) rotate(0);} 
+  100%{transform:translate(120px,160px) rotate(70deg); opacity:0}
+}
+
+/* small particle shards */
+.shard{position:absolute;width:6px;height:6px;border-radius:2px;background:#fff;opacity:0.9;pointer-events:none;z-index:170;transform:translate(-50%,-50%);}
+
+/* Score feedback animation */
+.score-popup {
+  position: absolute;
+  font-size: 32px;
+  pointer-events: none;
+  z-index: 1000;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  animation: scorePopup 800ms cubic-bezier(.2,.8,.2,1) forwards;
+}
+.score-popup.plus { 
+  background: radial-gradient(circle at center, #fff, #4caf50);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.score-popup.minus { 
+  background: radial-gradient(circle at center, #fff, #f44336);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes scorePopup {
+  0% { transform: translate(-50%, -50%) scale(0.5) rotate(-20deg); opacity: 0; }
+  20% { transform: translate(-50%, -80%) scale(1.4) rotate(0deg); opacity: 1; }
+  80% { transform: translate(-50%, -100px) scale(1) rotate(10deg); opacity: 1; }
+  100% { transform: translate(-50%, -120px) scale(0.8) rotate(20deg); opacity: 0; }
+}
+
+/* Slice trail effect */
+.slice-trail {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1000;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+  height: 3px;
+  width: 50px;
+  border-radius: 1px;
+  opacity: 0;
+  animation: sliceTrailFade 200ms ease-out forwards;
+  box-shadow: 0 0 8px rgba(255,255,255,0.5);
+}
+
+@keyframes sliceTrailFade {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+
+/* quick screen shake */
+.shake{animation:shakeAnim 420ms cubic-bezier(.36,.07,.19,.97) both}
+@keyframes shakeAnim{
+  0%{transform:translateY(0)}
+  20%{transform:translateY(-6px)}
+  40%{transform:translateY(4px)}
+  60%{transform:translateY(-3px)}
+  80%{transform:translateY(2px)}
+  100%{transform:translateY(0)}
+}
+
+/* overlay */
+.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:200}
+.overlay.hidden{display:none}
+.overlay-card{background:linear-gradient(180deg,#083048,#052330);padding:26px;border-radius:10px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+.overlay-card h2{margin:0 0 8px}
+.overlay-card p{opacity:0.8}
+
+/* responsive scaling */
+@media (max-width:520px){
+  .balloon{width:46px;height:62px}
+}

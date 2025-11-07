@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Balloon Burst — Shooting Gallery</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hud">
+    <div class="left">Time: <span id="timer">30</span>s</div>
+    <div class="mid">Hits: <span id="hits">0</span></div>
+    <div class="center">Target: <span id="target">20</span></div>
+    <div class="right">Score: <span id="score">0</span></div>
+  </header>
+
+  <main>
+    <div id="game-area" class="game-area"></div>
+    <div class="controls">
+  <button id="startBtn">Start Game</button>
+  <button id="restartBtn" style="display:none">Try Again</button>
+    </div>
+  </main>
+
+  <div id="overlay" class="overlay hidden">
+    <div class="overlay-card">
+      <h2 id="overlay-title">You Win!</h2>
+      <p id="overlay-msg">Great job — you popped balloons!</p>
+  <button id="overlay-btn">Try Again</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
