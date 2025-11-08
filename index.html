@@ -14,7 +14,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            overflow: auto; /* Changed to auto to allow scrolling if content overflows */
+            padding: 20px;
         }
         .container {
             text-align: center;
@@ -56,6 +57,7 @@
             animation: bounce 1s ease-in-out infinite;
             text-transform: uppercase;
             letter-spacing: 2px;
+            /* margin-top: 30px; (Removed margin-top to keep it closer to tagline) */
         }
         .enter-button:hover {
             transform: translateY(-5px) scale(1.05);
@@ -64,6 +66,38 @@
         .enter-button:active {
             transform: translateY(2px);
         }
+        
+        /* --- QR Code Style (MODIFIED) --- */
+        .qr-code {
+            width: 190px;  /* MODIFIED: Increased from 170px */
+            height: 190px; /* MODIFIED: Increased from 170px */
+            margin-top: 30px;   /* MODIFIED: Changed from margin-bottom */
+            border-radius: 10px;
+            background: #fff; /* White background for QR */
+            padding: 5px; /* Small padding */
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+        
+        /* --- Scoring Legend Style Added --- */
+        .scoring-legend {
+            margin-top: 30px;
+            font-size: 18px;
+            color: #cceeff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        .scoring-legend p {
+            margin: 5px 0;
+        }
+        .scoring-legend .red {
+            color: #ff8b8b;
+            font-weight: bold;
+        }
+        .scoring-legend .yellow {
+            color: #ffde8a;
+            font-weight: bold;
+        }
+        /* --- End Scoring Legend Style --- */
+
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.8; }
@@ -124,8 +158,16 @@
     <main class="container">
         <h1 class="logo">BALLOON<br>BURST</h1>
         <p class="tagline">Pop to Win • Dodge the Bombs • Beat the Clock</p>
+        
         <a href="game.html" class="enter-button">Enter Game</a>
-    </main>
+
+        <div class="scoring-legend">
+            <p><span class="red">Red Balloon</span> = +1 point</p>
+            <p><span class="yellow">Yellow Balloon</span> = -1 point</p>
+        </div>
+
+        <img src="WhatsApp Image 2025-11-08 at 17.13.30_39b7d0cd.jpg" alt="QR Code" class="qr-code">
+        </main>
 
     <script>
         // Create background balloons
