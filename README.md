@@ -19,7 +19,3 @@ Notes and tweaks
 - Bomb probability is ~12% per balloon.
 - You can tweak spawn rate, target, and time in `game.js`.
 
-If you want, I can:
--- Add sounds for pop/explosion (already includes basic WebAudio tones).
--- Add mobile touch optimizations and an on-screen crosshair.
--- Add a high-score save (localStorage).
